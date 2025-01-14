@@ -27,7 +27,6 @@ userSchema.pre('save',async function () {
 
         user.password = hashPass;
     } catch (error) {
-        // console.log('hello');
         throw error;
     }
 })

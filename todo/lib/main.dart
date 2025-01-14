@@ -7,8 +7,9 @@ import 'package:todo/screens/todo.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('token');
   runApp(MyApp(
-    token: prefs.getString('token'),
+    token: token,
   ));
 }
 
@@ -18,15 +19,20 @@ class MyApp extends StatelessWidget {
     required this.token,
   });
 
-  final token;
+  final String? token;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: JwtDecoder.isExpired(token)
-          ? const AuthScreen()
-          : ToDoScreen(
-              token: token,
-            ),
-    );
+    if (token == null || JwtDecoder.isExpired(token!)) {
+      return MaterialApp(
+        home: const AuthScreen(),
+      );
+    } else {
+      return MaterialApp(
+        home: ToDoScreen(
+          token: token!,
+        ),
+      );
+    }
   }
 }
