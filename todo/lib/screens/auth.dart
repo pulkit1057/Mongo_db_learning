@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,17 +29,14 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _submit() async {
-    // print("Hello");
     if (emailController.text.trim().isNotEmpty &&
         passwordController.text.trim().isNotEmpty) {
-      // print("Hello1");
       var reqBody = {
         "email": emailController.text,
         "password": passwordController.text
       };
 
       if (!isLogin) {
-        // print("Hello2");
         var response = await http.post(
             Uri.parse('${url}registeration'),
             body: jsonEncode(reqBody),
@@ -49,7 +45,6 @@ class _AuthScreenState extends State<AuthScreen> {
         var jsonResponse = await jsonDecode(response.body);
 
         if (jsonResponse['status']) {
-          // print("Hello3");
         } else {
           ScaffoldMessenger.of(context).clearSnackBars();
           ScaffoldMessenger.of(context).showSnackBar(
@@ -60,7 +55,6 @@ class _AuthScreenState extends State<AuthScreen> {
           return;
         }
       }
-      // print('hello');
       var response = await http.post(
         Uri.parse('${url}login'),
         body: jsonEncode(reqBody),
@@ -68,9 +62,7 @@ class _AuthScreenState extends State<AuthScreen> {
       );
 
       var jsonResponse = jsonDecode(response.body);
-      // print('hello1');
       if (jsonResponse['status']) {
-        // print('hello2');
         var myToken = jsonResponse['token'];
         prefs.setString('token', myToken);
         Navigator.of(context).push(
@@ -88,7 +80,6 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         );
       }
-      // print('hello3');
       emailController.clear();
       passwordController.clear();
     } else {
